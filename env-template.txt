@@ -1,0 +1,59 @@
+# Environment Configuration Template
+
+# =============================================
+# DEVELOPMENT ENVIRONMENT
+# =============================================
+
+# Supabase Configuration (Development)
+SUPABASE_URL=https://YOUR-DEV-PROJECT-ID.supabase.co
+SUPABASE_ANON_KEY=your-dev-anon-key
+
+# Stripe Configuration (Test Mode)
+STRIPE_SECRET_KEY=sk_test_your_test_secret_key
+STRIPE_PUBLISHABLE_KEY=pk_test_your_test_publishable_key
+
+# Email Configuration (Development)
+RESEND_API_KEY=your-resend-test-api-key
+
+# Environment Flag
+ENVIRONMENT=development
+
+# =============================================
+# PRODUCTION ENVIRONMENT
+# =============================================
+
+# Supabase Configuration (Production)
+# SUPABASE_URL=https://YOUR-PROD-PROJECT-ID.supabase.co
+# SUPABASE_ANON_KEY=your-prod-anon-key
+
+# Stripe Configuration (Live Mode)
+# STRIPE_SECRET_KEY=sk_live_your_live_secret_key
+# STRIPE_PUBLISHABLE_KEY=pk_live_your_live_publishable_key
+
+# Email Configuration (Production)
+# RESEND_API_KEY=your-resend-production-api-key
+
+# Environment Flag
+# ENVIRONMENT=production
+
+# =============================================
+# USAGE INSTRUCTIONS
+# =============================================
+
+# 1. Copy this file to your project root
+# 2. Rename to .env (for local development)
+# 3. Update the values with your actual keys
+# 4. If using Supabase Edge Functions, add these to Edge Function secrets instead
+# 5. Never commit actual API keys to version control
+
+# =============================================
+# EDGE FUNCTION SECRETS (Supabase)
+# =============================================
+
+# Add these secrets in your Supabase dashboard:
+# - STRIPE_SECRET_KEY
+# - RESEND_API_KEY
+# - ENVIRONMENT
+
+# Development project: Use test keys
+# Production project: Use live keys
