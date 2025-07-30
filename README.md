@@ -4,7 +4,7 @@ A comprehensive restaurant ordering and management platform built with modern we
 
 ## Project Overview
 
-**Live URL**: https://maki-express-ramen.com
+**Live URL**: https://maki-express-ramen.com (Soon will be deployed to this url).
 
 ### Key Features
 
