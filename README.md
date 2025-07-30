@@ -4,8 +4,8 @@ A comprehensive restaurant ordering and management platform built with modern we
 
 ## Project Overview
 
-**Live URL**: https://maki-express-ramen.com
-
+**Live URL**: https://maki-express-ramen.com (Soon will be deployed to this url).
+For demo testing purposes its available at : https://full-stack-restaurant-website.vercel.app/
 ### Key Features
 
 **Customer Experience:**
