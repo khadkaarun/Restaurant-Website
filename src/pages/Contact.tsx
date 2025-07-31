@@ -9,31 +9,37 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { MapPin, Phone, Clock, Mail } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from '@/hooks/use-toast';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
-  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
-    toast({
-      title: "Message sent!",
-      description: "Thank you for contacting us. We'll get back to you soon.",
-    });
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    setIsSubmitting(true);
+    
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    try {
+      const response = await fetch('https://formsubmit.co/makiexpress01@gmail.com', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (response.ok) {
+        setIsSubmitted(true);
+        form.reset();
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+  const resetForm = () => {
+    setIsSubmitted(false);
   };
 
   return (
@@ -66,9 +72,9 @@ const Contact = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    123 Fine Dining Street<br />
-                    Downtown District<br />
-                    City, State 12345
+                    209 W McMillan St<br />
+                    University Heights<br />
+                    Cincinnati, OH 45219
                   </p>
                 </CardContent>
               </Card>
@@ -82,7 +88,7 @@ const Contact = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    (555) 123-4567
+                    (513) 721-6999
                   </p>
                 </CardContent>
               </Card>
@@ -96,7 +102,7 @@ const Contact = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    info@thegoldenspoon.com
+                    makiexpress01@gmail.com
                   </p>
                 </CardContent>
               </Card>
@@ -111,19 +117,12 @@ const Contact = () => {
                 <CardContent>
                   <div className="space-y-2 text-muted-foreground">
                     <div className="flex justify-between">
-                      <span>Monday - Thursday</span>
-                      <span>5:00 PM - 10:00 PM</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Friday - Saturday</span>
-                      <span>5:00 PM - 11:00 PM</span>
+                      <span>Mon-Sat</span>
+                      <span>11AM - 9PM</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Sunday</span>
-                      <span>4:00 PM - 9:00 PM</span>
-                    </div>
-                    <div className="text-sm text-primary mt-2">
-                      Pickup orders: 15 minutes average
+                      <span>12PM - 9PM</span>
                     </div>
                   </div>
                 </CardContent>
@@ -140,15 +139,29 @@ const Contact = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  {isSubmitted ? (
+                    <div className="text-center space-y-4">
+                      <div className="p-6 bg-green-50 border border-green-200 rounded-lg">
+                        <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full">
+                          <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <h3 className="text-lg font-semibold text-green-800 mb-2">Successfully Submitted!</h3>
+                        <p className="text-green-700 mb-4">Thank you for your message. We'll get back to you soon!</p>
+                        <Button onClick={resetForm} variant="outline" className="border-green-300 text-green-700 hover:bg-green-50">
+                          Send Another Message
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Input
                           type="text"
                           name="name"
                           placeholder="Your Name"
-                          value={formData.name}
-                          onChange={handleChange}
                           required
                         />
                       </div>
@@ -157,8 +170,6 @@ const Contact = () => {
                           type="email"
                           name="email"
                           placeholder="Your Email"
-                          value={formData.email}
-                          onChange={handleChange}
                           required
                         />
                       </div>
@@ -168,24 +179,25 @@ const Contact = () => {
                         type="tel"
                         name="phone"
                         placeholder="Your Phone Number"
-                        value={formData.phone}
-                        onChange={handleChange}
                       />
                     </div>
                     <div>
                       <Textarea
                         name="message"
                         placeholder="Your Message"
-                        value={formData.message}
-                        onChange={handleChange}
                         required
                         rows={6}
                       />
+                      {/* FormSubmit configuration */}
+                      <input type="hidden" name="_subject" value="New Contact Form Submission - Maki Express" />
+                      <input type="hidden" name="_captcha" value="false" />
+                      <input type="hidden" name="_template" value="table" />
                     </div>
-                    <Button type="submit" className="w-full">
-                      Send Message
+                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                      {isSubmitting ? 'Sending...' : 'Send Message'}
                     </Button>
                   </form>
+                  )}
                 </CardContent>
               </Card>
             </div>
