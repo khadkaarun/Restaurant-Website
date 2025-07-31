@@ -1,40 +1,4 @@
-const Location = () => {
-  return (
-    <section id="location" className="py-12 bg-gray-50 sm:py-16 lg:py-20">
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl xl:text-5xl font-great-vibes">
-            Our Location
-          </h2>
-          <p className="mt-4 text-lg text-gray-600 sm:mt-6">
-            Come visit us and enjoy a delicious bowl of ramen!
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-8 mt-12 text-center lg:mt-16 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 sm:gap-12">
-          <div className="p-8 bg-white rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-gray-900">Address</h3>
-            <p className="mt-4 text-base text-gray-600">
-              209 W McMillan St<br />
-              University Heights<br />
-              Cincinnati, OH 45219
-            </p>
-          </div>
-
-          <div className="p-8 bg-white rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-gray-900">Hours</h3>
-            <p className="mt-4 text-base text-gray-600">
-              <strong>Mon-Sat:</strong> 11AM - 9PM<br />
-              <strong>Sunday:</strong> 12PM - 9PM
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default Location;
+// Updated: 2025-07-29 16:30:15
 // Updated: 2025-07-29 16:30:10
 // Updated: 2025-07-29 16:30:02
 
