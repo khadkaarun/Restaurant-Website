@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Plus, Trash2, Image as ImageIcon, Video } from 'lucide-react';
+import MediaUpload from '@/components/MediaUpload';
 
 interface GalleryItem {
   id: string;
@@ -35,6 +36,10 @@ export function GalleryManagement({ onStatsUpdate }: GalleryManagementProps) {
     caption: '',
     type: 'image' as 'image' | 'video',
   });
+
+  const handleMediaUploaded = (url: string, type: 'image' | 'video') => {
+    setFormData({ ...formData, image_url: url, type });
+  };
 
   useEffect(() => {
     fetchGalleryItems();
@@ -164,14 +169,15 @@ export function GalleryManagement({ onStatsUpdate }: GalleryManagementProps) {
               </div>
 
               <div>
-                <Label htmlFor="image_url">
-                  {formData.type === 'image' ? 'Image URL' : 'Video URL'}
+                <Label>
+                  Upload {formData.type === 'image' ? 'Image' : 'Video'}
                 </Label>
-                <Input
-                  id="image_url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                  placeholder="https://..."
+                <MediaUpload
+                  itemName={`gallery-item-${Date.now()}`}
+                  onMediaUploaded={handleMediaUploaded}
+                  currentMedia={formData.image_url}
+                  currentType={formData.type}
+                  allowedTypes={['image', 'video']}
                 />
               </div>
 
@@ -215,19 +221,12 @@ export function GalleryManagement({ onStatsUpdate }: GalleryManagementProps) {
                   className="w-full h-48 object-cover"
                 />
               ) : (
-                <div className="w-full h-48 bg-muted flex items-center justify-center">
-                  <Video className="h-12 w-12 text-muted-foreground" />
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                    <a
-                      href={item.image_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white underline"
-                    >
-                      View Video
-                    </a>
-                  </div>
-                </div>
+                <video
+                  src={item.image_url}
+                  className="w-full h-48 object-cover"
+                  controls
+                  preload="metadata"
+                />
               )}
               <div className="absolute top-2 left-2">
                 {item.type === 'image' ? (
