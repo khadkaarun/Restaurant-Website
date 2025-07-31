@@ -70,29 +70,18 @@ export default function OrderSuccess() {
           // This is a payment for additional charges (item substitution)
           console.log('Processing additional charge completion for order:', orderId);
           
-          // Fetch the updated order from database
-          const { data: orderData, error: orderError } = await supabase
-            .from('orders')
-            .select(`
-              *,
-              order_items (
-                id,
-                quantity,
-                unit_price_cents,
-                special_instructions,
-                custom_name,
-                menu_items (
-                  name,
-                  description
-                )
-              )
-            `)
-            .eq('id', orderId)
-            .single();
-
-          if (orderError) throw orderError;
+          // Use secure edge function to verify additional charge payment and fetch order
+          const { data: verificationResponse, error: verificationError } = await supabase.functions.invoke('verify-additional-charge', {
+            body: { sessionId, orderId }
+          });
           
-          console.log('Fetched updated order:', orderData);
+          if (verificationError || !verificationResponse.success) {
+            console.error('Failed to verify additional charge payment:', verificationError || verificationResponse.error);
+            throw new Error('Failed to verify additional charge payment');
+          }
+          
+          const orderData = verificationResponse.order;
+          console.log('Additional charge verified and order fetched:', orderData);
           setOrder(orderData);
 
           // Send updated confirmation email with new items
