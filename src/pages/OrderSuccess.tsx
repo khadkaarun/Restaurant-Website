@@ -113,36 +113,48 @@ export default function OrderSuccess() {
           }
           
           const orderWithItems = verificationResponse.order;
-          console.log('Order created and verified successfully:', orderWithItems);
+          const isDuplicate = verificationResponse.duplicate;
+          
+          if (isDuplicate) {
+            console.log('Duplicate order detected - skipping email and notifications:', orderWithItems.id);
+          } else {
+            console.log('Order created and verified successfully:', orderWithItems);
+          }
+          
           setOrder(orderWithItems);
 
           // Clear cart (localStorage cleanup no longer needed since cart data comes from Stripe metadata)
           clearCart();
 
-          // Send confirmation email
-          try {
-            await supabase.functions.invoke('send-order-email', {
-              body: {
-                type: 'confirmation',
-                order: orderWithItems
-              }
-            });
-            console.log('Confirmation email sent successfully');
-          } catch (emailError) {
-            console.error('Failed to send confirmation email:', emailError);
-          }
+          // Only send email and notifications for NEW orders, not duplicates
+          if (!isDuplicate) {
+            // Send confirmation email
+            try {
+              await supabase.functions.invoke('send-order-email', {
+                body: {
+                  type: 'confirmation',
+                  order: orderWithItems
+                }
+              });
+              console.log('Confirmation email sent successfully');
+            } catch (emailError) {
+              console.error('Failed to send confirmation email:', emailError);
+            }
 
-          // Send push notification
-          try {
-            await supabase.functions.invoke('send-push-notification', {
-              body: {
-                orderId: orderWithItems.id,
-                type: 'confirmation'
-              }
-            });
-            console.log('Push notification sent successfully');
-          } catch (pushError) {
-            console.error('Failed to send push notification:', pushError);
+            // Send push notification
+            try {
+              await supabase.functions.invoke('send-push-notification', {
+                body: {
+                  orderId: orderWithItems.id,
+                  type: 'confirmation'
+                }
+              });
+              console.log('Push notification sent successfully');
+            } catch (pushError) {
+              console.error('Failed to send push notification:', pushError);
+            }
+          } else {
+            console.log('Skipped email and notifications for duplicate order');
           }
         }
 
