@@ -101,18 +101,10 @@ export default function OrderSuccess() {
           // This is a regular new order completion
           console.log('Processing new order completion');
           
-          // Get cart data from localStorage
-          const cartDataString = localStorage.getItem('pendingCartData');
-          if (!cartDataString) {
-            throw new Error('Cart data not found - unable to verify order');
-          }
-          
-          const cartData = JSON.parse(cartDataString);
-          console.log('Retrieved cart data for verification:', cartData);
-          
           // Use edge function to verify Stripe payment and create order
+          // Cart data is now securely retrieved from Stripe session metadata
           const { data: verificationResponse, error: verificationError } = await supabase.functions.invoke('verify-stripe-payment', {
-            body: { sessionId, cartData }
+            body: { sessionId }
           });
           
           if (verificationError || !verificationResponse.success) {
@@ -124,10 +116,8 @@ export default function OrderSuccess() {
           console.log('Order created and verified successfully:', orderWithItems);
           setOrder(orderWithItems);
 
-          // Clear cart and stored data
+          // Clear cart (localStorage cleanup no longer needed since cart data comes from Stripe metadata)
           clearCart();
-          localStorage.removeItem('pendingOrderData');
-          localStorage.removeItem('pendingCartData');
 
           // Send confirmation email
           try {

@@ -33,17 +33,13 @@ const handler = async (req: Request): Promise<Response> => {
     logStep("Environment variables verified");
 
     // Parse request body
-    const { sessionId, cartData } = await req.json();
+    const { sessionId } = await req.json();
     
     if (!sessionId) {
       throw new Error("Session ID is required");
     }
 
-    if (!cartData || !Array.isArray(cartData)) {
-      throw new Error("Cart data is required");
-    }
-
-    logStep("Session ID and cart data received", { sessionId, cartItems: cartData.length });
+    logStep("Session ID received", { sessionId });
 
     // Initialize Stripe
     const stripe = new Stripe(stripeKey, {
@@ -158,7 +154,26 @@ const handler = async (req: Request): Promise<Response> => {
       // Continue processing - this is just a safety check
     }
 
-    // STEP 4: Use database transaction to prevent race conditions
+    // STEP 4: Extract cart data from Stripe session metadata
+    if (!session.metadata?.cart_data) {
+      throw new Error("Cart data not found in session metadata");
+    }
+    
+    let cartData;
+    try {
+      cartData = JSON.parse(session.metadata.cart_data);
+    } catch (parseError) {
+      logStep("Error parsing cart data from metadata", { error: parseError });
+      throw new Error("Invalid cart data in session metadata");
+    }
+    
+    if (!Array.isArray(cartData) || cartData.length === 0) {
+      throw new Error("Invalid cart data format");
+    }
+    
+    logStep("Cart data extracted from session metadata", { cartItems: cartData.length });
+    
+    // Use database transaction to prevent race conditions
     const { data: transactionResult, error: transactionError } = await supabase.rpc('create_order_transaction', {
       p_user_id: session.metadata?.user_id || null,
       p_customer_name: session.metadata?.customer_name,

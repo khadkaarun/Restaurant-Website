@@ -101,7 +101,7 @@ const handler = async (req: Request): Promise<Response> => {
         total_cents: totalCents.toString(),
         user_id: userId || '',
         items_count: cart.length.toString(),
-        // Create a compact cart summary instead of full JSON
+        cart_data: JSON.stringify(cart),
         cart_summary: cart.slice(0, 3).map(item => `${item.name}(${item.quantity})`).join(', ') + 
                      (cart.length > 3 ? `... +${cart.length - 3} more` : ''),
       },
