@@ -385,7 +385,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`Sending email to: ${toEmails.join(', ')}`);
 
     const emailResponse = await resend.emails.send({
-      from: "Maki Express Ramen House <onboarding@resend.dev>",
+      from: "Maki Express Ramen House <orders@arunkhadka.com>",
       to: toEmails,
       subject: isDevelopment ? `[DEV] ${subject}` : subject,
       html: html,
