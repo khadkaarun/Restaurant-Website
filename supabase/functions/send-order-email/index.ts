@@ -374,20 +374,19 @@ const handler = async (req: Request): Promise<Response> => {
       html = generateStatusUpdateEmailHTML(order);
     }
 
-    // Send emails to both customer and restaurant in production
-    const isDevelopment = Deno.env.get("ENVIRONMENT") !== "production";
+    // Always send emails to both customer and restaurant
     const customerEmail = order.customer_email;
-    const restaurantEmail = "makiexpress01@gmail.com";
+    const restaurantEmail = "makiexpress01@gmail.com"; // Your signup email
     
-    // In development, send only to restaurant email for testing
-    const toEmails = isDevelopment ? [restaurantEmail] : [customerEmail, restaurantEmail];
+    // Always send to both emails
+    const toEmails = [customerEmail, restaurantEmail];
     
     console.log(`Sending email to: ${toEmails.join(', ')}`);
 
     const emailResponse = await resend.emails.send({
-      from: "Maki Express Ramen House <orders@arunkhadka.com>",
+      from: "Maki Express Ramen House <noreply@restaurant.arunkhadka.com>",
       to: toEmails,
-      subject: isDevelopment ? `[DEV] ${subject}` : subject,
+      subject: subject,
       html: html,
     });
 
@@ -396,7 +395,7 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(JSON.stringify({ 
       success: true, 
       emailResponse,
-      note: isDevelopment ? `Development mode: Email sent to ${toEmails.join(', ')}` : undefined
+      note: `Email sent to: ${toEmails.join(', ')}`
     }), {
       status: 200,
       headers: {

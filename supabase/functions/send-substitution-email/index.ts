@@ -237,19 +237,18 @@ const handler = async (req: Request): Promise<Response> => {
     const html = generateSubstitutionEmailHTML(emailData);
 
     // Send emails using the same pattern as order emails
-    const isDevelopment = Deno.env.get("ENVIRONMENT") !== "production";
     const customerEmail = emailData.customerEmail;
-    const restaurantEmail = "makiexpress01@gmail.com";
+    const restaurantEmail = "makiexpress01@gmail.com"; // Your signup email
     
-    // In development, send only to restaurant email for testing
-    const toEmails = isDevelopment ? [restaurantEmail] : [customerEmail, restaurantEmail];
+    // Always send to both emails
+    const toEmails = [customerEmail, restaurantEmail];
     
     console.log(`Sending substitution email to: ${toEmails.join(', ')}`);
 
     const emailResponse = await resend.emails.send({
-      from: "Maki Express Ramen House <orders@arunkhadka.com>",
+      from: "Maki Express Ramen House <noreply@restaurant.arunkhadka.com>",
       to: toEmails,
-      subject: isDevelopment ? `[DEV] ${subject}` : subject,
+      subject: subject,
       html: html,
     });
 
