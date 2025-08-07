@@ -1,6 +1,6 @@
 # Maki Express Ramen House - Restaurant Management System
 
-A comprehensive restaurant ordering and management platform built with modern web technologies. This full-stack application provides customers with an intuitive ordering experience while offering restaurant staff powerful management tools.
+A comprehensive restaurant ordering and management platform built with modern web technologies. This full-stack application provides customers with an intuitive ordering experience while offering the restaurant staff powerful management tools.
 
 ## Project Overview
 
