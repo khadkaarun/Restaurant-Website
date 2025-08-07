@@ -25,7 +25,7 @@ For demo testing purposes its available at : https://restaurant.arunkhadka.com/
 - Staff role management (customer, staff, admin)
 
 **Technical Highlights:**
-- Real-time updates using Supabase
+- Real-time order updates using Supabase
 - Secure payment processing with automatic refunds
 - Email notifications for order updates
 - Push notification system for mobile engagement
