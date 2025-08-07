@@ -34,7 +34,7 @@ const About = () => {
           
           <div className="relative animate-scale-in">
             <img 
-              src="https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&fit=crop&w=800&q=80" 
+              src="https://sumyeaysdumzyaqdsyjd.supabase.co/storage/v1/object/public/menu-images/about-chef.webp?width=800&height=600&resize=cover&quality=85" 
               alt="Chef preparing ramen" 
               className="rounded-2xl shadow-2xl w-full h-[600px] object-cover hover-lift"
             />
