@@ -58,7 +58,7 @@ const Footer = () => {
             © 2024 Maki Express Ramen House. All rights reserved.
           </p>
           <p className="text-gray-400 text-sm flex items-center gap-2 mt-4 md:mt-0">
-            Made with <Heart className="w-4 h-4 text-red-500" /> for ramen lovers in Cincinnati
+            Made for ramen lovers in Cincinnati
           </p>
         </div>
       </div>
